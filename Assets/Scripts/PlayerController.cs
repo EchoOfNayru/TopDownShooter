@@ -2,14 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
-
+public class PlayerController : MonoBehaviour
+{
     public float speed;
-    public float radius;
 
-    void Start()
+    void Awake()
     {
-
+        if (GameManager.instance.player == null)
+        {
+            GameManager.instance.player = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame
@@ -43,19 +49,29 @@ public class PlayerController : MonoBehaviour {
             return;
         }
 
-            var collider = collision.collider;
+        var collider = collision.collider;
 
-            Vector3 otherPosition = collider.gameObject.transform.position;
-            Quaternion otherRotation = collider.gameObject.transform.rotation;
+        Vector3 otherPosition = collider.gameObject.transform.position;
+        Quaternion otherRotation = collider.gameObject.transform.rotation;
 
-            Vector3 direction;
-            float distance;
+        Vector3 direction;
+        float distance;
 
-            bool overlapped = Physics.ComputePenetration(thisCollider, transform.position, transform.rotation, collider, otherPosition, otherRotation, out direction, out distance);
+        bool overlapped = Physics.ComputePenetration(thisCollider, transform.position, transform.rotation, collider, otherPosition, otherRotation, out direction, out distance);
 
-            if (overlapped)
-            {
-            transform.position += (direction * distance);
-            }
+        if (overlapped)
+        {
+        transform.position += (direction * distance);
         }
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        Gate gate;
+        gate = other.GetComponent<Gate>();
+        if (gate != null)
+        {
+            GameManager.instance.MoveRoom(gate.direction);
+        }
+    }
+}
