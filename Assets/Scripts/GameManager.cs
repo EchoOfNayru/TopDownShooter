@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
 
     public PlayerController player;
     public CameraScript cam;
+    public UIManager uiManager;
 
     void Awake()
     {
@@ -43,5 +44,10 @@ public class GameManager : MonoBehaviour {
             cam.transform.position = new Vector3(cam.transform.position.x + 22, cam.transform.position.y, cam.transform.position.z);
             player.transform.position = new Vector3(cam.transform.position.x - 9, player.transform.position.y, cam.transform.position.z);
         }
+    }
+
+    public void Update()
+    {
+        uiManager.UpdateUI();
     }
 }

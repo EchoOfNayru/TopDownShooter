@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed;
+    public int health = 100;
 
     void Awake()
     {
@@ -17,8 +18,7 @@ public class PlayerController : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    // Update is called once per frame
+    
     void FixedUpdate()
     {
         if (Input.GetKey(KeyCode.W))
@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x + speed, transform.position.y, transform.position.z);
         }
+        transform.position = new Vector3(transform.position.x, .2f, transform.position.z);
     }
 
     void OnCollisionStay(Collision collision)
