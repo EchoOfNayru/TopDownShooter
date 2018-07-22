@@ -6,6 +6,11 @@ public class PlayerController : MonoBehaviour
 {
     public float speed;
     public int health = 100;
+    public int maxHealth = 100;
+
+    public int damage = 2;
+
+    public GameObject bullet;
 
     void Awake()
     {
@@ -18,7 +23,20 @@ public class PlayerController : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
+    private void Start()
+    {
+
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            Shoot();
+        }
+    }
+
     void FixedUpdate()
     {
         if (Input.GetKey(KeyCode.W))
@@ -73,6 +91,23 @@ public class PlayerController : MonoBehaviour
         if (gate != null)
         {
             GameManager.instance.MoveRoom(gate.direction);
+        }
+    }
+
+    void Shoot()
+    {
+        Ray ray = GameManager.instance.cam.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 100))
+        {
+            hit.point = new Vector3(hit.point.x, 0.2f, hit.point.z);
+            Debug.DrawLine(transform.position, hit.point);
+
+            GameObject thisBullet = Instantiate(bullet);
+            thisBullet.transform.position = transform.position;
+            thisBullet.GetComponent<Bullet>().direction = Vector3.Normalize(hit.point - transform.position);
+            thisBullet.GetComponent<Bullet>().damage = damage;
+            thisBullet.transform.LookAt(hit.point);
         }
     }
 }
