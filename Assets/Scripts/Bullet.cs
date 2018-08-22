@@ -26,10 +26,6 @@ public class Bullet : MonoBehaviour {
             {
                 player.health -= damage;
             }
-            //Need to change
-            // - not destroy itself on player bullets
-            // - not destroy itself on enemy bullets
-            // - not destroy itself on other enemies
             Destroy(gameObject);
         }
         if (playerBullet)
@@ -37,8 +33,10 @@ public class Bullet : MonoBehaviour {
             DamagableEnemy enemy = collision.collider.GetComponent<DamagableEnemy>();
             if (enemy != null)
             {
-
+                enemy.health -= damage;
+                enemy.Death();
             }
+            Destroy(gameObject);
         }
     }
 }

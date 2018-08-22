@@ -12,6 +12,10 @@ public class PlayerController : MonoBehaviour
 
     public GameObject bullet;
 
+    [Header("Multiple Guns")]
+    public Gun[] guns = new Gun[4];
+    public Transform[] bulletSpawns = new Transform[4];
+
     void Awake()
     {
         if (GameManager.instance.player == null)
@@ -24,17 +28,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-
-    }
-
     void Update()
     {
-        if (Input.GetMouseButton(0))
-        {
-            Shoot();
-        }
+        Shoot();
     }
 
     void FixedUpdate()
@@ -56,6 +52,14 @@ public class PlayerController : MonoBehaviour
             transform.position = new Vector3(transform.position.x + speed, transform.position.y, transform.position.z);
         }
         transform.position = new Vector3(transform.position.x, .2f, transform.position.z);
+
+        Ray ray = GameManager.instance.cam.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 100))
+        {
+            hit.point = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+            transform.LookAt(hit.point);
+        }
     }
 
     void OnCollisionStay(Collision collision)
